@@ -2,11 +2,14 @@ package com.example.notificationsample.di
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.notificationsample.R
+import com.example.notificationsample.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,11 +26,22 @@ object NotificationModule {
     fun provideNotificationBuilder(
         @ApplicationContext context: Context
     ): NotificationCompat.Builder {
+        val intent = Intent(context, MyReceiver::class.java).apply {
+            putExtra("MESSAGE", "Clicked!")
+        }
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE
+        } else {
+            0
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flag)
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Do Sport")
             .setContentText("Did you exercise today?")
             .setSmallIcon(R.drawable.ic_do_sport)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(0, "ACTION", pendingIntent)
     }
 
     @Singleton
