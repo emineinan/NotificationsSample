@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +41,14 @@ fun MainScreen(mainViewModel: MainViewModel = hiltViewModel()) {
             modifier = Modifier.width(240.dp)
         ) {
             Text(text = "Update Notification", color = Color.White, fontSize = 18.sp)
+        }
+
+        Button(
+            onClick = mainViewModel::cancelSimpleNotification,
+            colors = buttonColors(backgroundColor = Gray),
+            modifier = Modifier.width(240.dp)
+        ) {
+            Text(text = "Cancel Notification", color = Color.White, fontSize = 18.sp)
         }
     }
 }
