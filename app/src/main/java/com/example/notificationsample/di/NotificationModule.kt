@@ -3,12 +3,17 @@ package com.example.notificationsample.di
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
+import com.example.notificationsample.MainActivity
 import com.example.notificationsample.R
+import com.example.notificationsample.navigation.MY_ARG
+import com.example.notificationsample.navigation.MY_URI
 import com.example.notificationsample.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
@@ -36,12 +41,23 @@ object NotificationModule {
         }
 
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flag)
+        val clickIntent = Intent(
+            Intent.ACTION_VIEW,
+            "$MY_URI/$MY_ARG=Coming from Notification.".toUri(),
+            context,
+            MainActivity::class.java
+        )
+        val clickPendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(clickIntent)
+            getPendingIntent(1, flag)
+        }
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Do Sport")
             .setContentText("Did you exercise today?")
             .setSmallIcon(R.drawable.ic_do_sport)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .addAction(0, "ACTION", pendingIntent)
+            .setContentIntent(clickPendingIntent)
     }
 
     @Singleton
