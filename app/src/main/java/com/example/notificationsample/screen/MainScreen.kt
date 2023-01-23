@@ -62,5 +62,13 @@ fun MainScreen(
         ) {
             Text(text = "Details Screen", color = Color.White, fontSize = 18.sp)
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(
+            onClick = mainViewModel::showProgress,
+            colors = buttonColors(backgroundColor = Color.Magenta),
+            modifier = Modifier.width(240.dp)
+        ) {
+            Text(text = "Show progress", color = Color.White, fontSize = 18.sp)
+        }
     }
 }
